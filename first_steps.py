@@ -15,6 +15,8 @@ for tokenlist in sentences_generator_pud:
 
 map(lambda tokenlist: tokenlist.filter(feats__Gender = "Masc" ),sentences_generator_pud)
 
+
+#Questo è un test per vedere se funziona github
  
 """
 for tokenlist in sentences_generator_pud:
