@@ -23,16 +23,16 @@ if __name__ ==  "__main__":
             sentences = co.parse(strings)
             print("Data source: ", data_source)
             tags = {"Noun or Proper noun" : lambda x: x=="NOUN" or x=="PROPN", "Pronoun" : "PRON"}
-            for name, tag in tags:
-                masc, fem = count_genders(sentences, tag)
+            for name in tags:
+                masc, fem = count_genders(sentences, tags[name])
                 total = masc + fem
                 print("Tag:", name)
-                print("Masculine = ", masc)
-                print("Feminine =", fem)
+                print("Masculine = ", masc, masc/total*100, "%")
+                print("Feminine =", fem,  fem/total*100, "%")
                 print("Total: ", total)
 
                 
-
+__name__
 
 
 
