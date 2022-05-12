@@ -12,17 +12,21 @@ def count_genders(sentences, tag): #Pour filtrer dans "upos"
     return masc_full, fem_full
 
 
-data_sources = ["es_pud-ud-test.conllu"] #"es_ancora-ud-all.conllu", "es_gsd-ud-all.conllu"
+data_sources = ["es_pud-ud-test.conllu", "es_ancora-ud-all.conllu", "es_gsd-ud-all.conllu"]
 
 if __name__ ==  "__main__":
     upos_nouns = {"upos" : lambda x: x =="NOUN" or x=="PROPN"} #Ici on definit le filtre qu'on veut et on le rajout aussi à tags
     upos_pron = {"upos" : "PRON"}
     deprel_nsubjpass = {"deprel" : "nsubj:pass"}
-    tags = {"Noun or Proper noun" : upos_nouns, "Pronoun" : upos_pron, "Deprel" : deprel_nsubjpass} 
+    deprel_nsub = {"deprel" : "nsubj"}
+    deprel_obj = {"deprel" : "obj"}
+    tags = {"Noun or Proper noun" : upos_nouns, "Pronoun" : upos_pron, "Deprel subpass" : deprel_nsubjpass, "Deprel sub act" : deprel_nsub, "Deprel obj" : deprel_obj} 
     for data_source in data_sources:
         with open(data_source, "r", encoding="utf-8") as data_file:
             strings = data_file.read()
             sentences = co.parse(strings)
+            print(" ")
+            print(" ")
             print("Data source: ", data_source)
             for name, tag in tags.items():
                 masc, fem = count_genders(sentences, tag)
@@ -31,4 +35,4 @@ if __name__ ==  "__main__":
                 print("Masculine = ", masc, masc/total*100, "%")
                 print("Feminine =", fem,  fem/total*100, "%")
                 print("Total: ", total)
-                
+                print("  ")
