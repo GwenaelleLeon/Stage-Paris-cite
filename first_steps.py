@@ -112,7 +112,8 @@ def controles_rae(sentences, words, animacy_dict):
     animacy_dict["persona"] = "Hum"
     animacy_dict["acción"] = "Inam"
     animacy_dict["mamífero"] = "Anim"
-    print("Hay ", len(words), "palabras, y hay ", len(animacy_dict), " palabras conocidas. Entonces, ", con_animacy(words, animacy_dict), "ya tienen su animacy.")
+    annotated_words = con_animacy(words, animacy_dict)
+    print("Hay ", len(words), "palabras, y hay ", len(animacy_dict), " palabras conocidas. Entonces, ", annotated_words, "ya tienen su animacy.")
     for word in words:
         adivinado = False
         #guessed_animacy = "boh"
@@ -148,6 +149,10 @@ def controles_rae(sentences, words, animacy_dict):
                 break
             else:
                 print("No he entendido. Pasapalabra.")
+        new_annotated = con_animacy(words, animacy_dict)
+        if (new_annotated - annotated_words) > 0:
+            print("Ya he anotado ", new_annotated - annotated_words, "palabras.")
+            annotated_words = new_annotated
     return animacy_dict
 
 def load_animacies (sentences):
@@ -203,7 +208,6 @@ if __name__ ==  "__main__":
                 sentences = co.parse(strings)
                 resultat = filtrage(sentences, data_source)
                 animacy_dict = controles_rae(sentences, resultat, animacy_known)
-                animacy_dict['expertos'] = 'Hum'
                 new_corpus = update_animacy(sentences, animacy_dict)
                 new_strings = [string.serialize() for string in new_corpus]
             print('Editing ended. Outputting edited data to', args['o'][0])
