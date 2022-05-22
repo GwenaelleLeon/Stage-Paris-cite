@@ -110,7 +110,7 @@ def con_animacy(words, animacy_dict):
 
 def controles_rae(sentences, words, animacy_dict):
     animacy_dict["persona"] = "Hum"
-    animacy_dict["acción"] = "Inam"
+    animacy_dict["acción"] = "Inan"
     animacy_dict["mamífero"] = "Anim"
     annotated_words = con_animacy(words, animacy_dict)
     print("Hay ", len(words), "palabras, y hay ", len(animacy_dict), " palabras conocidas. Entonces, ", annotated_words, "ya tienen su animacy.")
@@ -137,7 +137,7 @@ def controles_rae(sentences, words, animacy_dict):
                 animacy_dict[word["form"]] = "Hum"
                 print("Ahora ", word['form'], 'es', animacy_dict[word["form"]])
             elif in_anim == "i":
-                animacy_dict[word["form"]] = "Inam"
+                animacy_dict[word["form"]] = "Inan"
                 print("Ahora ", word['form'], 'es', animacy_dict[word["form"]])
             elif in_anim == "a":
                 animacy_dict[word["form"]] = "Anim"
