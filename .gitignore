@@ -11,3 +11,4 @@ es_pud-ud-test.conllu
 *.conllu
 *.swp
 *.ipynb
+__pycache__/*
