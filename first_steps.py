@@ -108,12 +108,20 @@ def con_animacy(words, animacy_dict):
         if word['form'] in animacy_dict: total = total + 1
     return total
 
+def count_word_occurrences (words, word) :
+    counter = 0
+    for w in words:
+        if w['form'] == word['form']:
+            counter = counter + 1
+    return counter
+
 def controles_rae(sentences, words, animacy_dict):
     animacy_dict["persona"] = "Hum"
     animacy_dict["acción"] = "Inan"
     animacy_dict["mamífero"] = "Anim"
     annotated_words = con_animacy(words, animacy_dict)
     print("Hay ", len(words), "palabras, y hay ", len(animacy_dict), " palabras conocidas. Entonces, ", annotated_words, "ya tienen su animacy.")
+    words = sorted(words, key=lambda x: count_word_occurrences(words, x), reverse=True)
     for word in words:
         adivinado = False
         #guessed_animacy = "boh"
@@ -170,15 +178,11 @@ def check_animacy(word, animacy_dict):
     fin = descr.find('2.')
     if inicio >= 0:
         for word, anim in animacy_dict.items():
-            if descr[inicio:fin].find(word.capitalize()) != -1:
+            if descr[inicio:fin].find(word.capitalize()+ ' ') != -1:
                 #print(descr[inicio:fin].find(word.capitalize()))
                 print("He encontrado en ", descr, " la palabra ", word, 'cuya anim es', anim)
                 return anim
     return "boh"
-
-####Data sources##############################################################
-
-# data_sources = ["es_pud-ud-test.conllu"] #, "es_ancora-ud-all.conllu", "es_gsd-ud-all.conllu"]
 
 ####Main#####################################################################
 
@@ -208,6 +212,8 @@ if __name__ ==  "__main__":
                 sentences = co.parse(strings)
                 resultat = filtrage(sentences, data_source)
                 animacy_dict = controles_rae(sentences, resultat, animacy_known)
+                animacy_dict['lo'] = 'Inan'
+                animacy_dict['una'] = '_'
                 new_corpus = update_animacy(sentences, animacy_dict)
                 new_strings = [string.serialize() for string in new_corpus]
             print('Editing ended. Outputting edited data to', args['o'][0])
