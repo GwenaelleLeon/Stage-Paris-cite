@@ -66,6 +66,7 @@ def filtrage(sentences, data_source):
             word_info['inversion'] = control_inversion(word, sentence)
             word_info['sujet actif/passif'] = control_subj_pass_act(word, sentence)
             word_info['DOM'] = control_DOM(word, sentence)
+            word_info['Animacy'] = word['feats']['Animacy'] if word['feats'] != None and 'Animacy' in word['feats'] else '_'
             words.append(word_info)
     return words
 
@@ -178,27 +179,37 @@ def check_animacy(word, animacy_dict):
 
 if __name__ ==  "__main__":
     parser = argparse.ArgumentParser(description="Gweni Leon's all in one ConLLu manager", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-i', nargs='*', default=["es_pud-ud-test.conllu", "es_ancora-ud-all.conllu", "es_gsd-ud-all.conllu"], help="Input ConLLu dataset")
-    parser.add_argument('-o', nargs=1, help="Output ConLLU dataset (needed in order to add animacy data)")
-    parser.add_argument('-c', nargs=1, help="Output filtered CSV data from input dataset")
+    parser.add_argument('-l', nargs='*', default=["es_pud-ud-test.conllu", "es_ancora-ud-all.conllu", "es_gsd-ud-all.conllu"], help="Load datasets and analyze")
+    parser.add_argument('--anim', nargs=1, help="Edit animacy data for this dataset")
+    parser.add_argument('-o', nargs=1, default=['new.conllu'], help="Output edited ConLLU dataset (only if --anim was specified)")
+    parser.add_argument('-c', nargs=1, help="Output filtered CSV data from loaded datasets")
     args=vars(parser.parse_args())
     print(args)
-    for data_source in args['i']:
-        print("Starting work on", data_source)
-        new_strings = ""
+    animacy_known = {}
+    resultat = []
+    print('Loading data from', len(args['l']), 'datasets')
+    for data_source in args['l']:
+        print('Loading', data_source, '...')
         with open(data_source, "r", encoding="utf-8") as data_file:
             strings = data_file.read()
             sentences = co.parse(strings)
-            resultat = filtrage(sentences, data_source)
-            animacy_known = load_animacies(sentences)
-            animacy_dict = controles_rae(sentences, resultat, animacy_known)
-            new_corpus = update_animacy(sentences, animacy_dict)
-            new_strings = [string.serialize() for string in new_corpus]
-        with open(args['o'][0], "w", encoding="utf-8") as  out_file:
-            [out_file.write(new_string) for new_string in new_strings]
-
- #           if args['c'] != None:
- #               database_es = pd.DataFrame(resultat)
- #               database_es.to_csv(args['c'])
-
-  
+            resultat = resultat + filtrage(sentences, data_source)
+            animacy_known.update(load_animacies(sentences))
+    if args['anim'] != None:
+        for data_source in args['anim']:
+            print('Editing data from', data_source)
+            with open(data_source, "r", encoding="utf-8") as data_file:
+                strings = data_file.read()
+                sentences = co.parse(strings)
+                resultat = filtrage(sentences, data_source)
+                animacy_dict = controles_rae(sentences, resultat, animacy_known)
+                animacy_dict['expertos'] = 'Hum'
+                new_corpus = update_animacy(sentences, animacy_dict)
+                new_strings = [string.serialize() for string in new_corpus]
+            print('Editing ended. Outputting edited data to', args['o'][0])
+            with open(args['o'][0], "w", encoding="utf-8") as  out_file:
+                [out_file.write(new_string) for new_string in new_strings]
+    if args['c'] != None:
+        print('Outputting filtered data from the loaded datasets to', args['c'][0])
+        database_es = pd.DataFrame(resultat)
+        database_es.to_csv(args['c'][0])
