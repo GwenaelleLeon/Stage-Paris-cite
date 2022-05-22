@@ -26,7 +26,7 @@ if __name__ ==  "__main__":
     tags = {
         "Noun or Proper noun" : {"upos" : lambda x: x =="NOUN" or x=="PROPN"}, 
         "Pronoun" : {"upos" : "PRON"}, "Deprel subpass" : {"deprel" : "nsubj:pass"}, 
-        "Deprel sub act" : {"deprel" : "nsubj"}, "Deprel obj" : {"deprel" : "obj"}
+        "Deprel sujet active" : {"deprel" : "nsubj"}, "Deprel objet" : {"deprel" : "obj"}
         } 
     for data_source in data_sources:
         with open(data_source, "r", encoding="utf-8") as data_file:
