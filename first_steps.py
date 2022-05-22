@@ -180,7 +180,7 @@ def check_animacy(word, animacy_dict):
         for word, anim in animacy_dict.items():
             if descr[inicio:fin].find(word.capitalize()+ ' ') != -1:
                 #print(descr[inicio:fin].find(word.capitalize()))
-                print("He encontrado en ", descr, " la palabra ", word, 'cuya anim es', anim)
+                print("He encontrado en ", descr, " la palabra", word, 'cuya anim es', anim)
                 return anim
     return "boh"
 
@@ -212,8 +212,6 @@ if __name__ ==  "__main__":
                 sentences = co.parse(strings)
                 resultat = filtrage(sentences, data_source)
                 animacy_dict = controles_rae(sentences, resultat, animacy_known)
-                animacy_dict['lo'] = 'Inan'
-                animacy_dict['una'] = '_'
                 new_corpus = update_animacy(sentences, animacy_dict)
                 new_strings = [string.serialize() for string in new_corpus]
             print('Editing ended. Outputting edited data to', args['o'][0])
