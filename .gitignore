@@ -8,4 +8,6 @@ es_gsd-ud-dev.conllu
 es_gsd-ud-test.conllu
 es_gsd-ud-train.conllu
 es_pud-ud-test.conllu
-
+*.conllu
+*.swp
+*.ipynb
