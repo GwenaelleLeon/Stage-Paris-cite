@@ -14,4 +14,4 @@ es_pud-ud-test.conllu
 __pycache__/*
 script-stage.py
 .vscode/*
-.csv
+*.csv
