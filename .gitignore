@@ -13,5 +13,6 @@ es_pud-ud-test.conllu
 *.ipynb
 __pycache__/*
 script-stage.py
+script-stage_modifie.py
 .vscode/*
 *.csv
