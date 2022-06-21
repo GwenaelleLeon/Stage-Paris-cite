@@ -16,15 +16,15 @@ def control_number_and_gender(word):
             else: return word['feats']['Gender'], '_'
         else: 
             if 'Number' in word['feats']:
-                if word['deprel']=='PROPN':
+                if word['upos']=='PROPN':
                     return 'MISSING', word['feats']['Number']
                 else: return '_', word['feats']['Number']
             else: 
-                if word['deprel']=='PROPN':
+                if word['upos']=='PROPN':
                     return 'MISSING', '_'
                 else: return '_', '_'
     else: 
-        if word['deprel']=='PROPN':
+        if word['upos']=='PROPN':
                     return 'MISSING', '_'
         else: return '_', '_'
 
